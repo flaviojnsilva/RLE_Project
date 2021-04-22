@@ -24,7 +24,12 @@ public class RunLengthEncoding {
 
             if (index == lengthOfInput) {
                 // we have already completed everything let us append the final value of index - 1 iteration
-                result.append(lastCharacter).append(lastCharacterCount);
+                if (lastCharacterCount == 1) {
+
+                    result.append(lastCharacter);
+                    break;
+                } else
+                    result.append(lastCharacter).append(lastCharacterCount);
                 break;
             }
 
@@ -33,9 +38,13 @@ public class RunLengthEncoding {
             if (lastCharacter == currentCharacter) {
 
                 lastCharacterCount++;
-            } else {
 
-                result.append(lastCharacter).append(lastCharacterCount);
+            } else if (lastCharacterCount == 1) {
+                result.append(lastCharacter);
+                lastCharacter = currentCharacter;
+                lastCharacterCount = 1;
+            } else {
+                result.append('!').append(lastCharacter).append(lastCharacterCount);
                 lastCharacter = currentCharacter;
                 lastCharacterCount = 1;
             }
@@ -98,9 +107,6 @@ public class RunLengthEncoding {
                     System.out.println("Erro de Leitura");
                     return null;
                 }
-
-
-
             }
 
         }
