@@ -3,8 +3,8 @@ import java.util.concurrent.TimeUnit;
 public class RunLengthEncoding {
 
     public static void main(String[] args) {
-        encode("teeeeessste");
-        decode("e1r1t1r10");
+        //encode("teeeeessste");
+        decode("t!e5!s3te");
     }
 
 
@@ -79,44 +79,50 @@ public class RunLengthEncoding {
                     for (int i = 0; i < Integer.parseInt(timesToRepeatLastCharacter.toString()); i++) {
                         result.append(lastCharacter);
                     }
-                    break;
-                } else {
-                    System.out.println("Erro de Leitura");
-                    return null;
-                }
 
+                } else {
+                    result.append(lastCharacter);
+
+                }
+                break;
             }
 
             char currentCharacter = encoded.charAt(index);
 
-            if (Character.isDigit(currentCharacter)) {
+            if (currentCharacter == '!') {
 
-                timesToRepeatLastCharacter.append(currentCharacter);
-            } else {
+                System.out.println("flag");
+                currentCharacter = encoded.charAt(index + 1);
+                index++;
 
-                if (timesToRepeatLastCharacter.length() != 0) {
+                if (Character.isDigit(currentCharacter)) {
 
-                    // try parsing the timesToRepeatLastCharacter and get the number of times the character should be repeated
-                    for (int i = 0; i < Integer.parseInt(timesToRepeatLastCharacter.toString()); i++) {
+                    timesToRepeatLastCharacter.append(currentCharacter);
+                } else {
+
+                    if (timesToRepeatLastCharacter.length() != 0) {
+
+                        // try parsing the timesToRepeatLastCharacter and get the number of times the character should be repeated
+                        for (int i = 0; i < Integer.parseInt(timesToRepeatLastCharacter.toString()); i++) {
+                            result.append(lastCharacter);
+                        }
+
+                        lastCharacter = currentCharacter;
+                        timesToRepeatLastCharacter = new StringBuilder();
+                    } else {
                         result.append(lastCharacter);
                     }
-
-                    lastCharacter = currentCharacter;
-                    timesToRepeatLastCharacter = new StringBuilder();
-                } else {
-                    System.out.println("Erro de Leitura");
-                    return null;
                 }
             }
-
         }
 
         long nano2 = System.nanoTime();
 
         long result1 = TimeUnit.NANOSECONDS.toMicros(nano2 - nano1);
 
-        System.out.println("decoding total time taken : nano seconds -> " + result1);
         System.out.println(result);
+
+        System.out.println("decoding total time taken : nano seconds -> " + result1);
 
         return result.toString();
     }
