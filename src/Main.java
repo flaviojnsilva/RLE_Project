@@ -1,14 +1,33 @@
 import java.util.concurrent.TimeUnit;
+import java.nio.file.*;
 
-public class RunLengthEncoding {
+public class Main {
 
-    public static void main(String[] args) {
-        //encode("teeeeessste");
-        decode("t!e5!s3te");
+    public static void main(String[] args) throws Exception {
+        encode("teessssttte");
+//        encode("AMANHECEU. ERA A PRIMEIRA MANHÃ DO AMANHÃ E O AMANHECER DEU LUGAR À VERDADEIRA MANHÃ " +
+//                "QUE RAPIDAMENTE AMANHECIA PARA AMANHECER E SE TORNAR NO AMANHÃ AMANHECIDO.");
+//        decode("t!e5!s3te");
+
+//        String data = readFileAsString("C://Users//fjns//Documents//UFP//2o_Semestre//MULT_II//Projeto//input//CorpusSilesia//dickens");
+//        String data2 = readFileAsString("C://Users//fjns//Documents//UFP//2o_Semestre//MULT_II//Projeto//input//CorpusSilesia//nci");
+//        encode(data2);
+
     }
 
 
-    private static String encode(String input) {
+    private static String readFileAsString(String fileName) throws Exception {
+        String data = "";
+        data = new String(Files.readAllBytes(Paths.get(fileName)));
+        return data;
+    }
+
+    public static void teste(String input) {
+
+
+    }
+
+    public static void encode(String input) {
 
         long nano1 = System.nanoTime();
 
@@ -44,9 +63,17 @@ public class RunLengthEncoding {
                 lastCharacter = currentCharacter;
                 lastCharacterCount = 1;
             } else {
-                result.append('!').append(lastCharacter).append(lastCharacterCount);
-                lastCharacter = currentCharacter;
-                lastCharacterCount = 1;
+                if (lastCharacterCount >= 4) {
+                    result.append('!').append(lastCharacterCount).append(lastCharacter);
+                    lastCharacter = currentCharacter;
+                    lastCharacterCount = 1;
+                } else {
+                    for (int i = 0; i < lastCharacterCount; i++) {
+                        result.append(lastCharacter);
+                    }
+                    lastCharacter = currentCharacter;
+                    lastCharacterCount = 1;
+                }
             }
         }
 
@@ -54,13 +81,12 @@ public class RunLengthEncoding {
 
         long result1 = TimeUnit.NANOSECONDS.toMicros(nano2 - nano1);
 
-        System.out.println("encoding total time taken : nano seconds -> " + result1);
-        System.out.println(result);
-        return result.toString();
+        System.out.println("Tempo de duração da compressão (ET - encoding time): " + result1 + " ns\n");
+        System.out.println("Output depois da compressão usando RLE:\n" + result);
     }
 
 
-    private static String decode(String encoded) {
+    public static String decode(String encoded) {
 
         long nano1 = System.nanoTime();
 
