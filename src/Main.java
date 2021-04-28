@@ -4,14 +4,17 @@ import java.nio.file.*;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        encode("teessssttte");
+        //encode("teessssttte");
 //        encode("AMANHECEU. ERA A PRIMEIRA MANHÃ DO AMANHÃ E O AMANHECER DEU LUGAR À VERDADEIRA MANHÃ " +
 //                "QUE RAPIDAMENTE AMANHECIA PARA AMANHECER E SE TORNAR NO AMANHÃ AMANHECIDO.");
 //        decode("t!e5!s3te");
 
-//        String data = readFileAsString("C://Users//fjns//Documents//UFP//2o_Semestre//MULT_II//Projeto//input//CorpusSilesia//dickens");
+        String data = readFileAsString("C://Users//fjns//Documents//UFP//2o_Semestre//MULT_II//Projeto//input//CorpusSilesia//teste_dickens");
 //        String data2 = readFileAsString("C://Users//fjns//Documents//UFP//2o_Semestre//MULT_II//Projeto//input//CorpusSilesia//nci");
-//        encode(data2);
+
+        System.out.println(data.length() + "\n");
+        encode(data);
+
 
     }
 
@@ -22,10 +25,6 @@ public class Main {
         return data;
     }
 
-    public static void teste(String input) {
-
-
-    }
 
     public static void encode(String input) {
 
@@ -81,8 +80,11 @@ public class Main {
 
         long result1 = TimeUnit.NANOSECONDS.toMicros(nano2 - nano1);
 
+
         System.out.println("Tempo de duração da compressão (ET - encoding time): " + result1 + " ns\n");
         System.out.println("Output depois da compressão usando RLE:\n" + result);
+
+        System.out.println("Rácio: " + (float) (input.length()) / result.length() + ":1");
     }
 
 
