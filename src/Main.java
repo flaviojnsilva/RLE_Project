@@ -1,49 +1,73 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.nio.file.*;
 
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        //encode("teessssttte");
+//        encode("teessssttte");
 //        encode("AMANHECEU. ERA A PRIMEIRA MANHÃ DO AMANHÃ E O AMANHECER DEU LUGAR À VERDADEIRA MANHÃ " +
 //                "QUE RAPIDAMENTE AMANHECIA PARA AMANHECER E SE TORNAR NO AMANHÃ AMANHECIDO.");
 //        decode("t!e5!s3te");
 
-        String data = readFileAsString("C://Users//fjns//Documents//UFP//2o_Semestre//MULT_II//Projeto//input//CorpusSilesia//teste_dickens");
+        String data = readFileAsString("C://Users//fjns//Documents//UFP//2o_Semestre//MULT_II//Projeto//data//input//CorpusSilesia//teste_dickens");
 //        String data2 = readFileAsString("C://Users//fjns//Documents//UFP//2o_Semestre//MULT_II//Projeto//input//CorpusSilesia//nci");
 
-        System.out.println(data.length() + "\n");
         encode(data);
-
+        saveFiles(data);
 
     }
 
+    public static void saveFiles(String str) {
 
+        try {
+            String str1 = readFileAsString("C://Users//fjns//Documents//UFP//2o_Semestre//MULT_II//Projeto//data//input//CorpusSilesia//teste_dickens");
+            File newTextFile = new File("C://Users//fjns//Documents//UFP//2o_Semestre//MULT_II//Projeto//data//saved_files//thetextfile.txt");
+
+            FileWriter fw = new FileWriter(newTextFile);
+            fw.write(str1);
+            fw.close();
+
+        } catch (IOException iox) {
+            iox.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Método responsável por interpretar os ficheiros de input como uma string de caracteres (independentemente do formato do ficheiro)
+     *
+     * @param fileName
+     * @return
+     * @throws Exception
+     */
     private static String readFileAsString(String fileName) throws Exception {
         String data = "";
         data = new String(Files.readAllBytes(Paths.get(fileName)));
         return data;
     }
 
-
+    /**
+     * Método responsável pelo processo de encoding
+     *
+     * @param input
+     */
     public static void encode(String input) {
 
         long nano1 = System.nanoTime();
-
-        StringBuilder result = new StringBuilder();
         int lengthOfInput = input.length();
         char lastCharacter = input.charAt(0);
         int lastCharacterCount = 1;
 
-        // we will go until equal to the length of input and we will do the final flush inside the loop
-        // in this way we will have roughly 90% - 95% performance improvent over nested iteration
-        // but this might take a little more mory as compared to the nested loop iteration
+        StringBuilder result = new StringBuilder();
+
         for (int index = 1; index <= lengthOfInput; index++) {
 
             if (index == lengthOfInput) {
-                // we have already completed everything let us append the final value of index - 1 iteration
                 if (lastCharacterCount == 1) {
-
                     result.append(lastCharacter);
                     break;
                 } else
@@ -54,40 +78,40 @@ public class Main {
             char currentCharacter = input.charAt(index);
 
             if (lastCharacter == currentCharacter) {
-
                 lastCharacterCount++;
 
             } else if (lastCharacterCount == 1) {
                 result.append(lastCharacter);
                 lastCharacter = currentCharacter;
                 lastCharacterCount = 1;
+
             } else {
                 if (lastCharacterCount >= 4) {
                     result.append('!').append(lastCharacterCount).append(lastCharacter);
-                    lastCharacter = currentCharacter;
-                    lastCharacterCount = 1;
                 } else {
                     for (int i = 0; i < lastCharacterCount; i++) {
                         result.append(lastCharacter);
                     }
-                    lastCharacter = currentCharacter;
-                    lastCharacterCount = 1;
                 }
+                lastCharacter = currentCharacter;
+                lastCharacterCount = 1;
             }
         }
 
         long nano2 = System.nanoTime();
-
         long result1 = TimeUnit.NANOSECONDS.toMicros(nano2 - nano1);
-
 
         System.out.println("Tempo de duração da compressão (ET - encoding time): " + result1 + " ns\n");
         System.out.println("Output depois da compressão usando RLE:\n" + result);
-
-        System.out.println("Rácio: " + (float) (input.length()) / result.length() + ":1");
+        System.out.println("\nRácio de compressão resultante (CR - compression ratio): " + (float) (input.length()) / result.length() + ":1");
     }
 
-
+    /**
+     * Método responsável pelo processo de decoding
+     *
+     * @param encoded
+     * @return
+     */
     public static String decode(String encoded) {
 
         long nano1 = System.nanoTime();
@@ -145,16 +169,12 @@ public class Main {
         }
 
         long nano2 = System.nanoTime();
-
         long result1 = TimeUnit.NANOSECONDS.toMicros(nano2 - nano1);
 
         System.out.println(result);
-
         System.out.println("decoding total time taken : nano seconds -> " + result1);
 
         return result.toString();
     }
-
-
 }
 
