@@ -12,18 +12,18 @@ public class Main {
 //                "QUE RAPIDAMENTE AMANHECIA PARA AMANHECER E SE TORNAR NO AMANHÃ AMANHECIDO.");
 //        decode("t!e5!s3te");
 
-        String data = readFileAsString("C://Users//fjns//Documents//UFP//2o_Semestre//MULT_II//Projeto//data//input//CorpusSilesia//teste_dickens");
-//        String data2 = readFileAsString("C://Users//fjns//Documents//UFP//2o_Semestre//MULT_II//Projeto//input//CorpusSilesia//nci");
+        String data = readFileAsString("C://Users//fjns//Documents//UFP//2o_Semestre//MULT_II//Projeto//data//input//CorpusSilesia//dickens");
+//        String data2 = readFileAsString("C://Users//fjns//Documents//UFP//2o_Semestre//MULT_II//Projeto//data//input//CorpusSilesia//nci");
 
         encode(data);
-        saveFiles(data);
+        //saveFiles(data);
 
     }
 
     public static void saveFiles(String str) {
 
         try {
-            String str1 = readFileAsString("C://Users//fjns//Documents//UFP//2o_Semestre//MULT_II//Projeto//data//input//CorpusSilesia//teste_dickens");
+            String str1 = readFileAsString("C://Users//fjns//Documents//UFP//2o_Semestre//MULT_II//Projeto//data//input//CorpusSilesia//dickens");
             File newTextFile = new File("C://Users//fjns//Documents//UFP//2o_Semestre//MULT_II//Projeto//data//saved_files//thetextfile.txt");
 
             FileWriter fw = new FileWriter(newTextFile);
@@ -45,7 +45,7 @@ public class Main {
      * @throws Exception
      */
     private static String readFileAsString(String fileName) throws Exception {
-        String data = "";
+        String data;
         data = new String(Files.readAllBytes(Paths.get(fileName)));
         return data;
     }
@@ -100,10 +100,10 @@ public class Main {
 
         long nano2 = System.nanoTime();
         long result1 = TimeUnit.NANOSECONDS.toMicros(nano2 - nano1);
-
         System.out.println("Tempo de duração da compressão (ET - encoding time): " + result1 + " ns\n");
         System.out.println("Output depois da compressão usando RLE:\n" + result);
         System.out.println("\nRácio de compressão resultante (CR - compression ratio): " + (float) (input.length()) / result.length() + ":1");
+        saveFiles(result.toString());
     }
 
     /**
