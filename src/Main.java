@@ -12,7 +12,7 @@ public class Main {
 //                "QUE RAPIDAMENTE AMANHECIA PARA AMANHECER E SE TORNAR NO AMANHÃ AMANHECIDO.");
 //        decode("t!e5!s3te");
 
-        String data = readFileAsString("/Users/anogueira/Desktop/Multimedia/RLE/input/encode/CorpusSilesia/nci");
+        String data = readFileAsString("/Users/anogueira/Desktop/Multimedia/RLE/input/encode/CorpusSilesia/dickens");
 
         encode(data);
     }
