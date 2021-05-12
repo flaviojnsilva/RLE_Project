@@ -4,23 +4,23 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.nio.file.*;
 
+
 public class Main {
 
     public static void main(String[] args) throws Exception {
 
         //        encode("AMANHECEU. ERA A PRIMEIRA MANHÃ DO AMANHÃ E O AMANHECER DEU LUGAR À VERDADEIRA MANHÃ " +
 //                "QUE RAPIDAMENTE AMANHECIA PARA AMANHECER E SE TORNAR NO AMANHÃ AMANHECIDO.");
-//        decode("t!e5!s3te");
+        System.out.println(decode("t!e5!s3te"));
 
-        String data = readFileAsString("/Users/anogueira/Desktop/Multimedia/RLE/input/encode/CorpusSilesia/dickens");
-
-        encode(data);
+        //encode("nci");
     }
 
-    public static void saveFiles(String str) {
+    public static void saveFiles(String str, String name) {
 
         try {
-            File newTextFile = new File("/Users/anogueira/Desktop/Multimedia/RLE/thetextfile.txt");
+            String path = "/Users/anogueira/Desktop/Multimedia/RLE/output/ENC_" + name;
+            File newTextFile = new File(path);
 
             FileWriter fw = new FileWriter(newTextFile);
             fw.write(str);
@@ -51,11 +51,16 @@ public class Main {
      *
      * @param input
      */
-    public static void encode(String input) {
+    public static void encode(String input) throws Exception {
+
+
+        String path = "/Users/anogueira/Desktop/Multimedia/RLE/input/encode/CorpusSilesia/" + input;
+        String data = readFileAsString(path);
+
 
         long nano1 = System.nanoTime();
-        int lengthOfInput = input.length();
-        char lastCharacter = input.charAt(0);
+        int lengthOfInput = data.length();
+        char lastCharacter = data.charAt(0);
         int lastCharacterCount = 1;
 
         StringBuilder result = new StringBuilder();
@@ -71,7 +76,7 @@ public class Main {
                 break;
             }
 
-            char currentCharacter = input.charAt(index);
+            char currentCharacter = data.charAt(index);
 
             if (lastCharacter == currentCharacter) {
                 lastCharacterCount++;
@@ -94,14 +99,14 @@ public class Main {
             }
         }
         String teste = result.toString();
-        saveFiles(teste);
+        saveFiles(teste,input);
 
         long nano2 = System.nanoTime();
         long result1 = TimeUnit.NANOSECONDS.toMicros(nano2 - nano1);
 
         System.out.println("Tempo de duração da compressão (ET - encoding time): " + result1 + " ns\n");
         //System.out.println("Output depois da compressão usando RLE:\n" + result);
-        System.out.println("\nRácio de compressão resultante (CR - compression ratio): " + (float) (input.length()) / result.length() + ":1");
+        System.out.println("\nRácio de compressão resultante (CR - compression ratio): " + (float) (data.length()) / result.length() + ":1");
     }
 
     /**
