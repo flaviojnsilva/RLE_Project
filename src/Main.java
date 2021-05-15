@@ -11,9 +11,9 @@ public class Main {
 
         //        encode("AMANHECEU. ERA A PRIMEIRA MANHÃ DO AMANHÃ E O AMANHECER DEU LUGAR À VERDADEIRA MANHÃ " +
 //                "QUE RAPIDAMENTE AMANHECIA PARA AMANHECER E SE TORNAR NO AMANHÃ AMANHECIDO.");
-        System.out.println(decode("t!e5!s3te"));
+        System.out.println(decode("A!16B!4T"));
 
-        //encode("nci");
+        //encode("dickens");
     }
 
     public static void saveFiles(String str, String name) {
@@ -99,7 +99,7 @@ public class Main {
             }
         }
         String teste = result.toString();
-        saveFiles(teste,input);
+        saveFiles(teste, input);
 
         long nano2 = System.nanoTime();
         long result1 = TimeUnit.NANOSECONDS.toMicros(nano2 - nano1);
@@ -115,7 +115,7 @@ public class Main {
      * @param encoded
      * @return
      */
-    public static String decode(String encoded) {
+    private static String decode(String encoded) {
 
         long nano1 = System.nanoTime();
 
@@ -123,58 +123,45 @@ public class Main {
         int lengthOfEncodedString = encoded.length();
 
         StringBuilder timesToRepeatLastCharacter = new StringBuilder("");
-        char lastCharacter = encoded.charAt(0);
 
-        for (int index = 1; index <= lengthOfEncodedString; index++) {
+        for (int index = 0; index < lengthOfEncodedString; index++) {
+            char currentCharacter = encoded.charAt(index);
 
             if (index == lengthOfEncodedString) {
                 // we have reached to the end of encoding ; do the final round
                 // this code looks repeated
-                if (timesToRepeatLastCharacter.length() != 0) {
-                    for (int i = 0; i < Integer.parseInt(timesToRepeatLastCharacter.toString()); i++) {
-                        result.append(lastCharacter);
-                    }
-
-                } else {
-                    result.append(lastCharacter);
-
-                }
+                //for (int i = 0; i < Integer.parseInt(timesToRepeatLastCharacter.toString()); i++) {
+                result.append(currentCharacter);
+                // }
                 break;
             }
 
-            char currentCharacter = encoded.charAt(index);
+            else if (currentCharacter == '!') {
+                System.out.println("flag\n");
+            }
+            else if (Character.isDigit(currentCharacter)) {
 
-            if (currentCharacter == '!') {
+                timesToRepeatLastCharacter.append(currentCharacter);
+            } else {
+                if (!timesToRepeatLastCharacter.toString().equals("")) {
 
-                System.out.println("flag");
-                currentCharacter = encoded.charAt(index + 1);
-                index++;
-
-                if (Character.isDigit(currentCharacter)) {
-
-                    timesToRepeatLastCharacter.append(currentCharacter);
-                } else {
-
-                    if (timesToRepeatLastCharacter.length() != 0) {
-
-                        // try parsing the timesToRepeatLastCharacter and get the number of times the character should be repeated
-                        for (int i = 0; i < Integer.parseInt(timesToRepeatLastCharacter.toString()); i++) {
-                            result.append(lastCharacter);
-                        }
-
-                        lastCharacter = currentCharacter;
-                        timesToRepeatLastCharacter = new StringBuilder();
-                    } else {
-                        result.append(lastCharacter);
+                    // try parsing the timesToRepeatLastCharacter and get the number of times the character should be repeated
+                    for (int i = 0; i < Integer.parseInt(timesToRepeatLastCharacter.toString()); i++) {
+                        result.append(currentCharacter);
                     }
+                    timesToRepeatLastCharacter = new StringBuilder();
+                } else {
+                    result.append(currentCharacter);
+
                 }
             }
         }
 
+
         long nano2 = System.nanoTime();
+
         long result1 = TimeUnit.NANOSECONDS.toMicros(nano2 - nano1);
 
-        System.out.println(result);
         System.out.println("decoding total time taken : nano seconds -> " + result1);
 
         return result.toString();
