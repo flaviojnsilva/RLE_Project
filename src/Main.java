@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -9,17 +10,17 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        //        encode("AMANHECEU. ERA A PRIMEIRA MANHÃ DO AMANHÃ E O AMANHECER DEU LUGAR À VERDADEIRA MANHÃ " +
-//                "QUE RAPIDAMENTE AMANHECIA PARA AMANHECER E SE TORNAR NO AMANHÃ AMANHECIDO.");
-        System.out.println(decode("A!16B!4T"));
-
-        //encode("dickens");
+        /*encode("AMANHECEU. ERA A PRIMEIRA MANHÃ DO AMANHÃ E O AMANHECER DEU LUGAR À VERDADEIRA MANHÃ " +
+                "QUE RAPIDAMENTE AMANHECIA PARA AMANHECER E SE TORNAR NO AMANHÃ AMANHECIDO.");
+*/
+        encode("dickens");
+        decode("file.txt");
     }
 
     public static void saveFiles(String str, String name) {
 
         try {
-            String path = "/Users/anogueira/Desktop/Multimedia/RLE/output/ENC_" + name;
+            String path = "/Users/anogueira/Desktop/Multimedia/RLE/output/" + name;
             File newTextFile = new File(path);
 
             FileWriter fw = new FileWriter(newTextFile);
@@ -56,13 +57,12 @@ public class Main {
 
         String path = "/Users/anogueira/Desktop/Multimedia/RLE/input/encode/CorpusSilesia/" + input;
         String data = readFileAsString(path);
-
-
-        long nano1 = System.nanoTime();
         int lengthOfInput = data.length();
+
+        long InitialTime = System.nanoTime();
+
         char lastCharacter = data.charAt(0);
         int lastCharacterCount = 1;
-
         StringBuilder result = new StringBuilder();
 
         for (int index = 1; index <= lengthOfInput; index++) {
@@ -98,73 +98,73 @@ public class Main {
                 lastCharacterCount = 1;
             }
         }
-        String teste = result.toString();
-        saveFiles(teste, input);
 
-        long nano2 = System.nanoTime();
-        long result1 = TimeUnit.NANOSECONDS.toMicros(nano2 - nano1);
+        long FinalTime = System.nanoTime();
 
-        System.out.println("Tempo de duração da compressão (ET - encoding time): " + result1 + " ns\n");
-        //System.out.println("Output depois da compressão usando RLE:\n" + result);
+        long ElapsedTime = TimeUnit.NANOSECONDS.toMicros(FinalTime - InitialTime);
+
+        String FinalFile = result.toString();
+        String FileName = "ENC_" + input;
+
+        saveFiles(FinalFile, FileName);
+        Desktop.getDesktop().open(new File("/Users/anogueira/Desktop/Multimedia/RLE/output/" + FileName));
+        System.out.println("Tempo de duração da compressão (ET - encoding time): " + ElapsedTime + " ns\n");
         System.out.println("\nRácio de compressão resultante (CR - compression ratio): " + (float) (data.length()) / result.length() + ":1");
+        Desktop.getDesktop().open(new File("/Users/anogueira/Desktop/Multimedia/RLE/output/" + FileName));
+
     }
 
     /**
      * Método responsável pelo processo de decoding
      *
-     * @param encoded
+     * @param
      * @return
      */
-    private static String decode(String encoded) {
+    private static void decode(String input) throws Exception {
 
-        long nano1 = System.nanoTime();
+        String path = "/Users/anogueira/Desktop/Multimedia/RLE/input/decode/" + input;
+        String encoded = readFileAsString(path);
+
+        long InitialTime = System.nanoTime();
 
         StringBuilder result = new StringBuilder();
-        int lengthOfEncodedString = encoded.length();
 
+        int lengthOfEncodedString = encoded.length();
         StringBuilder timesToRepeatLastCharacter = new StringBuilder("");
 
         for (int index = 0; index < lengthOfEncodedString; index++) {
             char currentCharacter = encoded.charAt(index);
 
             if (index == lengthOfEncodedString) {
-                // we have reached to the end of encoding ; do the final round
-                // this code looks repeated
-                //for (int i = 0; i < Integer.parseInt(timesToRepeatLastCharacter.toString()); i++) {
-                result.append(currentCharacter);
-                // }
-                break;
-            }
 
-            else if (currentCharacter == '!') {
-                System.out.println("flag\n");
-            }
-            else if (Character.isDigit(currentCharacter)) {
+                result.append(currentCharacter);
+
+                break;
+            } else if (currentCharacter == '!') {
+
+            } else if (Character.isDigit(currentCharacter)) {
 
                 timesToRepeatLastCharacter.append(currentCharacter);
             } else {
                 if (!timesToRepeatLastCharacter.toString().equals("")) {
-
-                    // try parsing the timesToRepeatLastCharacter and get the number of times the character should be repeated
                     for (int i = 0; i < Integer.parseInt(timesToRepeatLastCharacter.toString()); i++) {
                         result.append(currentCharacter);
                     }
                     timesToRepeatLastCharacter = new StringBuilder();
                 } else {
                     result.append(currentCharacter);
-
                 }
             }
         }
+        long FinalTime = System.nanoTime();
+        long ElapsedTime = TimeUnit.NANOSECONDS.toMicros(FinalTime - InitialTime);
+        System.out.println("Decoding total time taken : nano seconds -> " + ElapsedTime);
 
-
-        long nano2 = System.nanoTime();
-
-        long result1 = TimeUnit.NANOSECONDS.toMicros(nano2 - nano1);
-
-        System.out.println("decoding total time taken : nano seconds -> " + result1);
-
-        return result.toString();
+        String FinalFile = result.toString();
+        String FileName = "DEC_" + input;
+        System.out.println("New File Created on output path.\nFile Name:" + FileName);
+        saveFiles(FinalFile, FileName);
+        Desktop.getDesktop().open(new File("/Users/anogueira/Desktop/Multimedia/RLE/output/" + FileName));
     }
 }
 
