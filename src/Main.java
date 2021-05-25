@@ -13,15 +13,14 @@ public class Main {
         /*encode("AMANHECEU. ERA A PRIMEIRA MANHÃ DO AMANHÃ E O AMANHECER DEU LUGAR À VERDADEIRA MANHÃ " +
                 "QUE RAPIDAMENTE AMANHECIA PARA AMANHECER E SE TORNAR NO AMANHÃ AMANHECIDO.");
 */
-        encode("mr");
-        //encode("teste.txt");
-        decode("ENC_mr");
+        encode("teste.txt");
+        //decode("ENC_teste.txt");
     }
 
     public static void saveFiles(String str, String name) {
 
         try {
-            String path = "C:\\Users\\fjns\\Documents\\UFP\\2o_Semestre\\MULT_II\\Projeto\\output\\" + name;
+            String path = "/Users/anogueira/Desktop/RLE_Project/output/" + name;
             File newTextFile = new File(path);
 
             FileWriter fw = new FileWriter(newTextFile);
@@ -55,7 +54,7 @@ public class Main {
      */
     public static void encode(String input) throws Exception {
 
-        String path = "C:/Users/fjns/Documents/UFP/2o_Semestre/MULT_II/Projeto/input/CorpusSilesia/" + input;
+        String path = "/Users/anogueira/Desktop/RLE_Project/input/CorpusSilesia/" + input;
         String data = readFileAsString(path);
         int lengthOfInput = data.length();
         System.out.println(data.length());
@@ -69,11 +68,18 @@ public class Main {
         for (int index = 1; index <= lengthOfInput; index++) {
 
             if (index == lengthOfInput) {
-                if (lastCharacterCount == 1) {
-                    result.append(lastCharacter);
+                if (lastCharacterCount > 3) {
+
+                    result.append('!').append(lastCharacterCount).append(lastCharacter);
                     break;
-                } else
-                    result.append(lastCharacter).append(lastCharacterCount);
+                } else if (lastCharacterCount < 4 && lastCharacterCount > 1) {
+                    for (int i = 0; i < lastCharacterCount; i++) {
+                        result.append(lastCharacter);
+                    }
+                    break;
+                }
+
+                result.append(lastCharacter);
                 break;
             }
 
@@ -124,13 +130,14 @@ public class Main {
     private static void decode(String input) throws Exception {
 
         int flag = 0;
-        int count = 0;
-        String path = "C:\\Users\\fjns\\Documents\\UFP\\2o_Semestre\\MULT_II\\Projeto\\output\\" + input;
+
+        String path = "/Users/anogueira/Desktop/RLE_Project/output/" + input;
         String encoded = readFileAsString(path);
 
         long InitialTime = System.nanoTime();
 
         StringBuilder result = new StringBuilder();
+        StringBuilder empty = new StringBuilder("");
 
         int lengthOfEncodedString = encoded.length();
         StringBuilder timesToRepeatLastCharacter = new StringBuilder("");
@@ -165,8 +172,8 @@ public class Main {
 
             } else {
 
-                if (!timesToRepeatLastCharacter.toString().equals("")) {
-                    for (int i = 0; i < Integer.parseInt(timesToRepeatLastCharacter.toString()); i++) {
+                if (!timesToRepeatLastCharacter.toString().isEmpty()) {
+                    for (int i = 0; i < Long.parseLong(timesToRepeatLastCharacter.toString()); i++) {
                         result.append(currentCharacter);
                     }
                     flag = 0;
@@ -174,7 +181,6 @@ public class Main {
                 } else {
                     result.append(currentCharacter);
                     timesToRepeatLastCharacter = new StringBuilder();
-
                 }
             }
         }
@@ -189,7 +195,7 @@ public class Main {
         System.out.println(result.length());
         //System.out.println("New File Created on output path.\nFile Name:" + FileName);
         saveFiles(FinalFile, FileName);
-       // Desktop.getDesktop().open(new File("C:\\Users\\fjns\\Documents\\UFP\\2o_Semestre\\MULT_II\\Projeto\\output\\" + FileName));
+        // Desktop.getDesktop().open(new File("C:\\Users\\fjns\\Documents\\UFP\\2o_Semestre\\MULT_II\\Projeto\\output\\" + FileName));
     }
 }
 
