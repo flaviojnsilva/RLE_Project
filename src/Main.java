@@ -1,34 +1,27 @@
-import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.nio.file.*;
 
-
 public class Main {
-
     public static void main(String[] args) throws Exception {
-
-        /*encode("AMANHECEU. ERA A PRIMEIRA MANHÃ DO AMANHÃ E O AMANHECER DEU LUGAR À VERDADEIRA MANHÃ " +
-                "QUE RAPIDAMENTE AMANHECIA PARA AMANHECER E SE TORNAR NO AMANHÃ AMANHECIDO.");
-*/
-        encode("teste.txt");
-        //decode("ENC_teste.txt");
+        //encode("nci");
+        decode("ENC_exampleForEncode.txt");
     }
 
+    /**
+     * Método responsável por salvar os ficheiros para a pasta output
+     *
+     * @param str
+     * @param name
+     */
     public static void saveFiles(String str, String name) {
-
         try {
-            String path = "/Users/anogueira/Desktop/RLE_Project/output/" + name;
+            String path = "/Users/fjns/Documents/UFP/2o_Semestre/MULT_II/Projeto/output/" + name;
             File newTextFile = new File(path);
-
             FileWriter fw = new FileWriter(newTextFile);
             fw.write(str);
             fw.close();
-
-        } catch (IOException iox) {
-            iox.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -53,23 +46,18 @@ public class Main {
      * @param input
      */
     public static void encode(String input) throws Exception {
-
-        String path = "/Users/anogueira/Desktop/RLE_Project/input/CorpusSilesia/" + input;
+        //String path = "/Users/fjns/Documents/UFP/2o_Semestre/MULT_II/Projeto/input/" + input;
+        String path = "/Users/fjns/Documents/UFP/2o_Semestre/MULT_II/Projeto/input/CorpusSilesia/" + input;
         String data = readFileAsString(path);
         int lengthOfInput = data.length();
-        System.out.println(data.length());
-
         long InitialTime = System.nanoTime();
-
         char lastCharacter = data.charAt(0);
         int lastCharacterCount = 1;
         StringBuilder result = new StringBuilder();
 
         for (int index = 1; index <= lengthOfInput; index++) {
-
             if (index == lengthOfInput) {
                 if (lastCharacterCount > 3) {
-
                     result.append('!').append(lastCharacterCount).append(lastCharacter);
                     break;
                 } else if (lastCharacterCount < 4 && lastCharacterCount > 1) {
@@ -78,21 +66,16 @@ public class Main {
                     }
                     break;
                 }
-
                 result.append(lastCharacter);
                 break;
             }
-
             char currentCharacter = data.charAt(index);
-
             if (lastCharacter == currentCharacter) {
                 lastCharacterCount++;
-
             } else if (lastCharacterCount == 1) {
                 result.append(lastCharacter);
                 lastCharacter = currentCharacter;
                 lastCharacterCount = 1;
-
             } else {
                 if (lastCharacterCount >= 4) {
                     result.append('!').append(lastCharacterCount).append(lastCharacter);
@@ -107,18 +90,17 @@ public class Main {
         }
 
         long FinalTime = System.nanoTime();
-
         long ElapsedTime = TimeUnit.NANOSECONDS.toMicros(FinalTime - InitialTime);
-
         String FinalFile = result.toString();
         String FileName = "ENC_" + input;
-
         saveFiles(FinalFile, FileName);
+        System.out.println("- Tamanho do ficheiro (inicial): " + data.length());
+        System.out.println("- Tamanho do ficheiro (após compressão): " + result.length() + "\n");
+        System.out.println("- Rácio de compressão resultante (CR - compression ratio): " + (float) (data.length()) / result.length() + ":1" + "\n");
+        System.out.println("- Comprimento médio do código (ACL - Average Code Lenght): Comprimento Fixo (Token = 3)" + "\n");
+        System.out.println("- Tempo de duração da compressão (ET - encoding time): " + ElapsedTime + " ns\n");
         //Desktop.getDesktop().open(new File("C:\\Users\\fjns\\Documents\\UFP\\2o_Semestre\\MULT_II\\Projeto\\output\\encoded_files" + FileName));
-        System.out.println("Tempo de duração da compressão (ET - encoding time): " + ElapsedTime + " ns\n");
-        System.out.println("Rácio de compressão resultante (CR - compression ratio): " + (float) (data.length()) / result.length() + ":1");
         //Desktop.getDesktop().open(new File("C:\\Users\\fjns\\Documents\\UFP\\2o_Semestre\\MULT_II\\Projeto\\output\\encoded_files" + FileName));
-
     }
 
     /**
@@ -129,26 +111,19 @@ public class Main {
      */
     private static void decode(String input) throws Exception {
 
-        int flag = 0;
-
-        String path = "/Users/anogueira/Desktop/RLE_Project/output/" + input;
+        String path = "/Users/fjns/Documents/UFP/2o_Semestre/MULT_II/Projeto/output/" + input;
         String encoded = readFileAsString(path);
-
+        int flag = 0;
         long InitialTime = System.nanoTime();
-
         StringBuilder result = new StringBuilder();
         StringBuilder empty = new StringBuilder("");
-
         int lengthOfEncodedString = encoded.length();
         StringBuilder timesToRepeatLastCharacter = new StringBuilder("");
 
         for (int index = 0; index < lengthOfEncodedString; index++) {
             char currentCharacter = encoded.charAt(index);
-
             if (index == lengthOfEncodedString) {
-
                 result.append(currentCharacter);
-
                 break;
             } else if (currentCharacter == '!') {
                 char next = encoded.charAt(index + 1);
@@ -160,18 +135,12 @@ public class Main {
                 } else {
                     result.append(currentCharacter);
                 }
-
             } else if (Character.isDigit(currentCharacter) && flag == 1) {
-
                 timesToRepeatLastCharacter.append(currentCharacter);
-
             } else if (Character.isDigit(currentCharacter)) {
                 result.append(currentCharacter);
                 timesToRepeatLastCharacter = new StringBuilder();
-
-
             } else {
-
                 if (!timesToRepeatLastCharacter.toString().isEmpty()) {
                     for (int i = 0; i < Long.parseLong(timesToRepeatLastCharacter.toString()); i++) {
                         result.append(currentCharacter);
@@ -187,15 +156,11 @@ public class Main {
 
         long FinalTime = System.nanoTime();
         long ElapsedTime = TimeUnit.NANOSECONDS.toMicros(FinalTime - InitialTime);
-        System.out.println("Decoding total time taken : nano seconds -> " + ElapsedTime);
-
         String FinalFile = result.toString();
         String FileName = "DEC_" + input;
-
-        System.out.println(result.length());
-        //System.out.println("New File Created on output path.\nFile Name:" + FileName);
+        System.out.println("- Tempo de duração da descompressão (DT - decoding time): " + ElapsedTime + " ns\n");
         saveFiles(FinalFile, FileName);
-        // Desktop.getDesktop().open(new File("C:\\Users\\fjns\\Documents\\UFP\\2o_Semestre\\MULT_II\\Projeto\\output\\" + FileName));
+        //System.out.println("New File Created on output path.\nFile Name:" + FileName);
+        //Desktop.getDesktop().open(new File("C:\\Users\\fjns\\Documents\\UFP\\2o_Semestre\\MULT_II\\Projeto\\output\\" + FileName));
     }
 }
-
