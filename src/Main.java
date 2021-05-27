@@ -5,8 +5,8 @@ import java.nio.file.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        //encode("nci");
-        decode("ENC_exampleForEncode.txt");
+        //encode("dickens");
+        //decode("ENC_dickens");
     }
 
     /**
@@ -49,11 +49,11 @@ public class Main {
         //String path = "/Users/fjns/Documents/UFP/2o_Semestre/MULT_II/Projeto/input/" + input;
         String path = "/Users/fjns/Documents/UFP/2o_Semestre/MULT_II/Projeto/input/CorpusSilesia/" + input;
         String data = readFileAsString(path);
+        StringBuilder result = new StringBuilder();
         int lengthOfInput = data.length();
         long InitialTime = System.nanoTime();
         char lastCharacter = data.charAt(0);
         int lastCharacterCount = 1;
-        StringBuilder result = new StringBuilder();
 
         for (int index = 1; index <= lengthOfInput; index++) {
             if (index == lengthOfInput) {
@@ -106,8 +106,7 @@ public class Main {
     /**
      * Método responsável pelo processo de decoding
      *
-     * @param
-     * @return
+     * @param input
      */
     private static void decode(String input) throws Exception {
 
@@ -115,9 +114,9 @@ public class Main {
         String encoded = readFileAsString(path);
         int flag = 0;
         long InitialTime = System.nanoTime();
+        int lengthOfEncodedString = encoded.length();
         StringBuilder result = new StringBuilder();
         StringBuilder empty = new StringBuilder("");
-        int lengthOfEncodedString = encoded.length();
         StringBuilder timesToRepeatLastCharacter = new StringBuilder("");
 
         for (int index = 0; index < lengthOfEncodedString; index++) {
