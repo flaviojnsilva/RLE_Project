@@ -5,8 +5,8 @@ import java.nio.file.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        //encode("exampleForEncode.txt");
-        //decode("ENC_xml");
+        encode("dickens");
+        //decode("ENC_exampleForEncode.txt");
     }
 
     /**
@@ -17,7 +17,7 @@ public class Main {
      */
     public static void saveFiles(String str, String name) {
         try {
-            String path = "/Users/fjns/Documents/UFP/2o_Semestre/MULT_II/Projeto/output/" + name;
+            String path = "/Users/anogueira/Desktop/Multimedia/output/" + name;
             File newTextFile = new File(path);
             FileWriter fw = new FileWriter(newTextFile);
             fw.write(str);
@@ -46,8 +46,8 @@ public class Main {
      * @param input
      */
     public static void encode(String input) throws Exception {
-        String path = "/Users/fjns/Documents/UFP/2o_Semestre/MULT_II/Projeto/input/" + input;
-        //String path = "/Users/fjns/Documents/UFP/2o_Semestre/MULT_II/Projeto/input/CorpusSilesia/" + input;
+        //String path = "/Users/anogueira/Desktop/Multimedia/input/" + input;
+        String path = "/Users/anogueira/Desktop/Multimedia/input/CorpusSilesia/" + input;
         String data = readFileAsString(path);
         StringBuilder result = new StringBuilder();
         int lengthOfInput = data.length();
@@ -99,9 +99,7 @@ public class Main {
         System.out.println("- Rácio de compressão resultante (CR - compression ratio): " + (float) (data.length()) / result.length() + ":1" + "\n");
         System.out.println("- Comprimento médio do código (ACL - Average Code Lenght): Comprimento Fixo (Token = 3)" + "\n");
         System.out.println("- Tempo de duração da compressão (ET - encoding time): " + ElapsedTime + " ns\n");
-        //Desktop.getDesktop().open(new File("C:\\Users\\fjns\\Documents\\UFP\\2o_Semestre\\MULT_II\\Projeto\\output\\encoded_files" + FileName));
-        //Desktop.getDesktop().open(new File("C:\\Users\\fjns\\Documents\\UFP\\2o_Semestre\\MULT_II\\Projeto\\output\\encoded_files" + FileName));
-    }
+       }
 
     /**
      * Método responsável pelo processo de decoding
@@ -110,7 +108,7 @@ public class Main {
      */
     private static void decode(String input) throws Exception {
 
-        String path = "/Users/fjns/Documents/UFP/2o_Semestre/MULT_II/Projeto/output/" + input;
+        String path = "/Users/anogueira/Desktop/Multimedia/output/" + input;
         String encoded = readFileAsString(path);
         int flag = 0;
         long InitialTime = System.nanoTime();
@@ -159,7 +157,5 @@ public class Main {
         String FileName = "DEC_" + input;
         System.out.println("- Tempo de duração da descompressão (DT - decoding time): " + ElapsedTime + " ns\n");
         saveFiles(FinalFile, FileName);
-        //System.out.println("New File Created on output path.\nFile Name:" + FileName);
-        //Desktop.getDesktop().open(new File("C:\\Users\\fjns\\Documents\\UFP\\2o_Semestre\\MULT_II\\Projeto\\output\\" + FileName));
-    }
+   }
 }
