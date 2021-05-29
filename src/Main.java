@@ -5,8 +5,8 @@ import java.nio.file.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        //encode("dickens");
-        //decode("ENC_dickens");
+        //encode("exampleForEncode.txt");
+        //decode("ENC_xml");
     }
 
     /**
@@ -46,8 +46,8 @@ public class Main {
      * @param input
      */
     public static void encode(String input) throws Exception {
-        //String path = "/Users/fjns/Documents/UFP/2o_Semestre/MULT_II/Projeto/input/" + input;
-        String path = "/Users/fjns/Documents/UFP/2o_Semestre/MULT_II/Projeto/input/CorpusSilesia/" + input;
+        String path = "/Users/fjns/Documents/UFP/2o_Semestre/MULT_II/Projeto/input/" + input;
+        //String path = "/Users/fjns/Documents/UFP/2o_Semestre/MULT_II/Projeto/input/CorpusSilesia/" + input;
         String data = readFileAsString(path);
         StringBuilder result = new StringBuilder();
         int lengthOfInput = data.length();
